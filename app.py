@@ -1,77 +1,76 @@
-from flask import Flask, Response
+        from flask import Flask, render_template_string
 
 app = Flask(__name__)
 
+HTML = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OPHELİA</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .heart-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+
+        .left-heart, .right-heart {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            border-radius: 50%;
+            border: 5px solid transparent;
+            box-shadow: 0 0 20px #00f;
+        }
+
+        .left-heart {
+            left: 0;
+            border-right: none;
+            border-top: 5px solid #00f;
+            transform: rotate(-45deg);
+            box-shadow: 0 0 20px #00f;
+        }
+
+        .right-heart {
+            right: 0;
+            border-left: none;
+            border-top: 5px solid #f0f;
+            transform: rotate(45deg);
+            box-shadow: 0 0 20px #f0f;
+        }
+
+        .text {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="heart-container">
+        <div class="left-heart"></div>
+        <div class="right-heart"></div>
+        <div class="text">I love You</div>
+    </div>
+</body>
+</html>
+"""
+
 @app.route("/")
-def index():
-    html_content = """
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>OPHELİA</title>
-        <style>
-            body {
-                margin: 0;
-                background: #000;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
-                height: 100vh;
-                color: white;
-                font-family: sans-serif;
-            }
-            h1 {
-                position: absolute;
-                font-size: 2rem;
-                color: white;
-            }
-            canvas {
-                border: none;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>BADE</h1>
-        <canvas id="heartCanvas" width="600" height="600"></canvas>
-        <script>
-            const canvas = document.getElementById("heartCanvas");
-            const ctx = canvas.getContext("2d");
-
-            function drawHeart(x, y, size, color) {
-                ctx.beginPath();
-                for (let t = 0; t < Math.PI * 2; t += 0.01) {
-                    const px = size * 16 * Math.pow(Math.sin(t), 3);
-                    const py = -size * (13 * Math.cos(t) - 5 * Math.cos(2 * t)
-                        - 2 * Math.cos(3 * t) - Math.cos(4 * t));
-                    ctx.lineTo(x + px, y + py);
-                }
-                ctx.closePath();
-                ctx.shadowBlur = 25;
-                ctx.shadowColor = color;
-                ctx.strokeStyle = color;
-                ctx.lineWidth = 2;
-                ctx.stroke();
-            }
-
-            let time = 0;
-
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                const r = Math.floor(128 + 128 * Math.sin(time));
-                const b = Math.floor(128 + 128 * Math.cos(time));
-                const color = rgb(${r}, 0, ${b});
-                drawHeart(canvas.width / 2, canvas.height / 2, 10, color);
-                time += 0.05;
-                requestAnimationFrame(animate);
-            }
-
-            animate();
-        </script>
-    </body>
-    </html>
-    """
-    return Response(html_content, mimetype='text/html')
-
-if name == "main":
-    app.run()
+def home():
+    return render_template_string(HTML)
